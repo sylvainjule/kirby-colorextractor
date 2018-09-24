@@ -98,6 +98,8 @@ echo $image->color(); ?>
 
 - [ ] Merge hooks into one shared callback
 
+- [ ] Add composer support
+
 ## License
 
 MIT
