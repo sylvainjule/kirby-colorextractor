@@ -65,7 +65,7 @@ return array(
 The plugin works (or at least it should pretty soon) well together with [@TimOetting's color picker](https://github.com/TimOetting/kirby-color), which might come handy to preview and adjust the detected color.
 
 ```yaml
-# Page blueprint within pages/ folder
+# Page blueprint within site/blueprints/pages/ folder
 sections:
       files:
         headline: Images
@@ -74,7 +74,7 @@ sections:
 ```
 
 ```yaml
-# Color template within files/color.yml
+# Color template within site/blueprints/files/color.yml
 title: Color
 accept:
   mime: image/jpeg, image/png
