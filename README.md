@@ -10,9 +10,9 @@ This plugins extracts a dominant or average color of any image and stores it in 
 
 It can be used in two ways :
 
-#### Hook
+#### Hooks
 
-Onceinstalled within the ```plugins``` folder, it will automatically start extracting colors for any image uploaded or replaced in the panel.
+Once installed within the ```plugins``` folder, it will automatically start extracting colors for any image uploaded or replaced in the panel.
 
 #### Field
 
