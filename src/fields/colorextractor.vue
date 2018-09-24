@@ -1,0 +1,196 @@
+<template>
+    <k-field v-bind="$attrs">
+    	<k-list-item v-if="count == 0"
+    				 :text="messageEmpty" 
+    				 :icon="iconEmpty" 
+    				 :element="el" 
+    				 class="colorextractor-empty" />
+    	<k-list-item v-else
+    				 :text="message" 
+    				 :icon="icon" 
+    				 :element="el" 
+    				 class="colorextractor-button"
+    				 @click="$refs.dialog.open()" />
+
+    	<k-dialog ref="dialog" theme="negative">
+		    <template v-if="!processing">
+		    	<k-text>
+		    		There {{isString}} <strong>{{count}} {{imageString}}</strong> without any color extracted, do you want to process {{itString}} now?
+		    	</k-text>
+				<template slot="footer">
+				    <k-button-group>
+				      <k-button icon="cancel" @click="$refs.dialog.close()">Cancel</k-button>
+				      <k-button icon="check" theme="positive" @click="processImages">Process</k-button>
+				    </k-button-group>
+				</template>
+		    </template>
+		    <template v-else>
+			    <k-headline>Processing…</k-headline>
+		        <k-progress ref="progress"/>
+			    <ul class="k-upload-list">
+			        <div class="colorextractor-progress-caption">
+		            	<p class="k-colextractor-counter">Extracted: {{completedCount}} / {{count}}</p>
+		            </div>
+		        </ul>
+				<template slot="footer">
+				    <k-button-group>
+				      <k-button icon="cancel" @click="abortExtraction">Cancel</k-button>
+				    </k-button-group>
+				</template>
+		    </template>
+		</k-dialog>
+    </k-field>
+</template>
+
+<script>
+import extractColor from "./helpers/extractColors.js";
+
+export default {
+	data() { 
+		return {
+			el: 'div',
+			iconEmpty: {
+				type: 'check',
+				back: 'theme-empty'
+			},
+			icon: {
+				type: 'refresh',
+				back: 'theme-process'
+			},
+			processing: false,
+			completed: [],
+			failed: [],
+		}
+	},
+	props: {
+		message: String,
+		messageEmpty: String,
+		files: Array,
+	},
+	computed: {
+		count: function() {
+			let count = this.files.length
+			count = Object.is(count, undefined) ? 0 : count;
+			return count;
+		},
+		completedCount: function() {
+			let count = this.completed.length
+			count = Object.is(count, undefined) ? 0 : count;
+			return count;
+		},
+		imageString: function() {
+			return this.count == 1 ? 'image' : 'images'
+		},
+		isString: function() {
+			return this.count == 1 ? 'is' : 'are'
+		},
+		itString: function() {
+			return this.count == 1 ? 'it' : 'them'
+		}
+	},
+	methods: {
+	    processImages() {
+	    	this.resetArrays();
+	    	this.processing = true;
+	    	this.files.forEach(file => {
+		        extractColor(file, {
+		            success: (xhr, file) => {
+		                this.complete(file, 'success');
+		            },
+		            error: (xhr, file, response) => {
+		            	this.complete(file, 'error');
+		            }
+		        });
+		    });
+	    },
+	    complete(file, status) {
+	    	this.completed.push(file.name);
+	    	if (status == 'error') {
+	    		this.failed.push(file.name);
+	    	}
+
+	    	if (this.completedCount == this.count) {
+		        if (this.failed.length > 0) {
+		            this.failedExtraction();
+		        }
+		        else {
+			        setTimeout(() => {
+			            this.completedExtraction();
+			        }, 250);
+			    }
+		    }
+
+		    this.setProgress();
+	    },
+	    setProgress() {
+			let percent = this.completedCount / this.count * 100;
+			    percent = Math.max(0, Math.min(100, percent));
+			this.$refs.progress.set(percent);
+	    },
+		completedExtraction() {
+			let message = this.completedCount +' images processed!';
+
+			this.$refs.dialog.close();
+			this.$store.dispatch("notification/success", message);
+
+	    	this.processing = false;
+	    	this.currentIndex = 0;
+	    	this.files = {};
+		},
+		failedExtraction() {
+			let errorString = this.failed.length > 1 ? ' errors.' : ' error.';
+			let message = this.completedCount +' images processed, with '+ this.failed.length + errorString;
+			let failed = this.failed;
+
+			this.$refs.dialog.close();
+			this.$store.dispatch("notification/error", message);
+
+			this.processing = false;
+	    	this.currentIndex = 0;
+	    	this.files = this.files.filter(function(file) {
+				return failed.indexOf(file.name) > -1;
+			});
+		},
+	    abortExtraction() {
+	    	this.$refs.dialog.close();
+	    	this.processing = false;
+	    },
+	    resetArrays() {
+	    	this.completed = [];
+	    	this.failed = [];
+	    }
+	},
+}
+</script>
+
+<style>
+	.k-icon[data-back="theme-empty"],
+	.k-icon[data-back="theme-process"] { 
+        background: #f5f5f5;
+	}
+	.k-icon[data-back="theme-empty"] svg { 
+		color: #a7bd69; 
+	}
+	.k-icon[data-back="theme-process"] svg { 
+		color: #16171a; 
+	}
+	.colorextractor-empty {
+		user-select: none;
+	}
+	.colorextractor-button {
+		user-select: none;
+		cursor: pointer;
+	}
+	.colorextractor-progress-caption {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		margin-top: 3px;
+	}
+	.k-colextractor-counter {
+		color: #777;
+		line-height: 1.5em;
+		font-size: .875rem;
+		white-space: pre;
+	}
+</style>
