@@ -4,6 +4,10 @@
 
 This plugins extracts a dominant / average color of any image and stores it in the file's metadata as a HEX value.
 
+## Installation
+
+Download and copy folder to ```/site/plugins/colorextractor```
+
 ## Usage
 
 It can be used in two ways :
