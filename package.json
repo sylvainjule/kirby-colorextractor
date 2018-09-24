@@ -1,5 +1,5 @@
 {
-  "name": "kirby-dominantcolor",
+  "name": "kirby-colorextractor",
   "version": "1.0.0",
   "description": "Extract color out of an image",
   "main": "index.js",
