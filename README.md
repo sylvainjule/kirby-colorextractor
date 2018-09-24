@@ -102,6 +102,8 @@ echo $image->color(); ?>
 
 - [ ] Add examples of dominant / average colors for different images
 
+- [ ] Better error handling
+
 ## License
 
 MIT
