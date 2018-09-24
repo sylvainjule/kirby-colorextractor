@@ -100,6 +100,8 @@ echo $image->color(); ?>
 
 - [ ] Add composer support
 
+- [ ] Add examples of dominant / average colors for different images
+
 ## License
 
 MIT
