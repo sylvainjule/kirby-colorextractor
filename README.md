@@ -2,7 +2,7 @@
 
 ![colorextractor-preview](https://user-images.githubusercontent.com/14079751/45942863-78817980-bfe4-11e8-97c6-d2982d993af2.jpg)
 
-This plugins extracts the most dominant color of any image and stores it in the file's metadata as a HEX value.
+This plugins extracts a dominant or average color of any image and stores it in the file's metadata as a HEX value.
 
 
 
