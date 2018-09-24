@@ -1,6 +1,6 @@
 # Kirby 3 – Color extractor
 
-![colorextractor-preview](https://user-images.githubusercontent.com/14079751/45942863-78817980-bfe4-11e8-97c6-d2982d993af2.jpg)
+![colorextractor](https://user-images.githubusercontent.com/14079751/45950127-c73c0d00-bffe-11e8-8e10-eef90185f624.jpg)
 
 This plugins extracts a dominant / average color of any image and stores it in the file's metadata as a HEX value.
 
