@@ -4,8 +4,6 @@
 
 This plugins extracts a dominant / average color of any image and stores it in the file's metadata as a HEX value.
 
-
-
 ## Usage
 
 It can be used in two ways :
@@ -28,13 +26,11 @@ It will show a button, which will guide you through the image processing.
 
 ![colorextractor-field](https://user-images.githubusercontent.com/14079751/45931472-ef7c2b00-bf6e-11e8-8260-ec1d2ed64ed5.png)
 
-
-
 ## Options
 
 #### Vibrant / Average
 
-By default, the plugin tends to extract the most dominant / vibrant color of the image. Sometimes though, it can be handy to extract an average one based on an approximation of the whole color palette. When set to ```true```, this options shrinks the image to a 1x1 pixel thumb, then grab the color the image processor chose as the average one.
+By default, the plugin tends to extract the most dominant / vibrant color of the image. Sometimes though, it can be handy to extract an average one based on an approximation of the whole color palette. When set to ```true```, this options shrinks the image to a 1x1 pixel thumb, then grab the color the image processor chose as the average one. You'll find some examples [here](https://github.com/sylvainjule/kirby3-colorextractor/docs/examples.md).
 
 Default is ```false``` 
 
@@ -84,7 +80,6 @@ fields:
     type: color
 ```
 
-
 Accessing the color from a template is straightforward :
 
 ```php
@@ -100,9 +95,9 @@ echo $image->color(); ?>
 
 - [ ] Add composer support
 
-- [ ] Add examples of dominant / average colors for different images
-
 - [ ] Better error handling
+
+- [x] Add examples of dominant / average colors for different images
 
 ## License
 
