@@ -1,5 +1,5 @@
 {
-    "name": "sylvain/colorextractor",
+    "name": "sylvainjule/colorextractor",
     "description": "Extract dominant / average color from any image.",
     "version": "0.1",
     "type": "kirby-plugin",
