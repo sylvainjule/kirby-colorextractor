@@ -1,0 +1,16 @@
+{
+    "name": "sylvain/colorextractor",
+    "description": "Extract dominant / average color from any image.",
+    "version": "0.1",
+    "type": "kirby-plugin",
+    "license": "MIT",
+    "autoload": {
+        "files": ["config.php"]
+    },
+    "authors": [
+        {
+            "name": "Sylvain Julé",
+            "email": "contact@sylvain-jule.fr"
+        }
+    ]
+}
