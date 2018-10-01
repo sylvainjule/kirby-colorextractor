@@ -95,12 +95,9 @@ echo $image->color(); ?>
 
 ## Todo
 
-- [ ] Merge hooks into one shared callback
-
-- [ ] Add composer support
-
 - [ ] Better error handling
-
+- [ ] Add composer support
+- [X] Hooks callback as an anonymous function
 - [x] Add examples of dominant / average colors for different images
 
 ## License
