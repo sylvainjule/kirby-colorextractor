@@ -96,7 +96,7 @@ echo $image->color(); ?>
 ## Todo
 
 - [ ] Better error handling
-- [ ] Add composer support
+- [X] Add composer support
 - [X] Hooks callback as an anonymous function
 - [x] Add examples of dominant / average colors for different images
 
