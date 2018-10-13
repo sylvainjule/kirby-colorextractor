@@ -96,6 +96,8 @@ echo $image->color(); ?>
 ## Todo
 
 - [ ] Better error handling
+- [ ] Cache index table (check [lapse](https://github.com/bnomei/kirby3-lapse))
+- [ ] Replace `$thumb->url()` with `$thumb->root()`(or `$thumb->mediaRoot()`) once [the thumb issue](https://github.com/k-next/kirby/issues/1015) is fixed 
 - [X] Add composer support
 - [X] Hooks callback as an anonymous function
 - [x] Add examples of dominant / average colors for different images
