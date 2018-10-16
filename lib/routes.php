@@ -2,27 +2,27 @@
 
 return array(
     array(
-        'pattern' => 'plugins/colorextractor/process-image',
-        'method'  => 'GET|POST',
+        'pattern' => 'api/colorextractor/process-image',
+        'method'  => 'POST',
         'action'  => function() {
-            $id            = $_POST['id'];
+            $id            = get('id');
             $file          = site()->index()->files()->find($id);
             $size          = option('sylvainjule.colorextractor.average') ? 1 : 300;
         	$fallbackColor = option('sylvainjule.colorextractor.fallBackColor');
 
         	try {
-        		extractColor($file, $size, $fallbackColor);
-        		$data = array(
+        		ColExtractor::extractColor($file, $size, $fallbackColor);
+        		$response = array(
 		            'status' => 'success',
 		        );
-		        return response::json($data);
+		        return $response;
         	}
         	catch (Exception $e) {
-        		$data = array(
+        		$response = array(
 		            'status' => 'error',
-		            'error'  => $e->getMessage()
+		            'message'  => $e->getMessage()
 		        );
-		        return response::json($data);
+		        return $response;
         	}
         }
     )

@@ -1,6 +1,6 @@
 {
   "name": "kirby-colorextractor",
-  "version": "0.1",
+  "version": "0.0.1",
   "description": "Extract color out of an image",
   "main": "index.js",
   "author": "Sylvain Julé",
@@ -28,6 +28,7 @@
     "envify": "^4.1.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^6.0.0",
+    "node-sass": "^4.9.4",
     "uglify-js": "^3.4.7",
     "vue": "^2.5.17",
     "vueify": "^9.4.1",

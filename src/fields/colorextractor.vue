@@ -10,21 +10,37 @@
     				 :icon="icon" 
     				 :element="el" 
     				 class="colorextractor-button"
-    				 @click="$refs.dialog.open()" />
+    				 @click="openDialog" />
 
     	<k-dialog ref="dialog" theme="negative">
-		    <template v-if="!processing">
-		    	<k-text>
-		    		There {{isString}} <strong>{{count}} {{imageString}}</strong> without any color extracted, do you want to process {{itString}} now?
-		    	</k-text>
+		    <template v-if="!processing && !completedCount">
+	    		<k-text>
+	    			There {{isString}} <strong>{{count}} {{imageString}}</strong> without any color extracted, do you want to process {{itString}} now?
+	    		</k-text>
 				<template slot="footer">
 				    <k-button-group>
-				      <k-button icon="cancel" @click="$refs.dialog.close()">Cancel</k-button>
-				      <k-button icon="check" theme="positive" @click="processImages">Process</k-button>
+				        <k-button icon="cancel" @click="$refs.dialog.close()">Cancel</k-button>
+				        <k-button icon="check" theme="positive" @click="processImages">Process</k-button>
 				    </k-button-group>
 				</template>
 		    </template>
-		    <template v-else>
+		    <template v-else-if="!processing && failed.length">
+	    		<k-text>
+	    			{{ errorMessage }}
+	    		</k-text>
+	    		<ul class="colorextractor-errors">
+	    			<li v-for="(obj, index) in failed" class="error">
+	    				<strong>Filename:</strong> {{ obj.name }}
+	    				<div class="error-message">{{obj.message}}</div>
+	    			</li>
+	    		</ul>
+				<template slot="footer">
+				    <k-button-group>
+				        <k-button icon="cancel" @click="$refs.dialog.close()">Close</k-button>
+				    </k-button-group>
+				</template>
+		    </template>
+		    <template v-else-if="processing">
 			    <k-headline>Processing…</k-headline>
 		        <k-progress ref="progress"/>
 			    <ul class="k-upload-list">
@@ -60,6 +76,7 @@ export default {
 			processing: false,
 			completed: [],
 			failed: [],
+			errorMessage: String,
 		}
 	},
 	props: {
@@ -70,13 +87,13 @@ export default {
 	computed: {
 		count: function() {
 			let count = this.files.length
-			count = Object.is(count, undefined) ? 0 : count;
-			return count;
+			count = Object.is(count, undefined) ? 0 : count
+			return count
 		},
 		completedCount: function() {
 			let count = this.completed.length
-			count = Object.is(count, undefined) ? 0 : count;
-			return count;
+			count = Object.is(count, undefined) ? 0 : count
+			return count
 		},
 		imageString: function() {
 			return this.count == 1 ? 'image' : 'images'
@@ -90,37 +107,43 @@ export default {
 	},
 	methods: {
 	    processImages() {
-	    	this.resetArrays();
-	    	this.processing = true;
+	    	this.resetArrays()
+	    	this.processing = true
+
 	    	this.files.forEach(file => {
-		        extractColor(file, {
-		            success: (xhr, file) => {
-		                this.complete(file, 'success');
-		            },
-		            error: (xhr, file, response) => {
-		            	this.complete(file, 'error');
-		            }
-		        });
+	    		this.$api.post('colorextractor/process-image', {id: file.id})
+	    			.then(response => {
+	    				// the image has been processed
+	    				this.completed.push(file.name)
+
+				    	// if it was the last image to process
+				    	if (this.completedCount == this.count) {
+					        if (this.failed.length) this.failedExtraction()
+					        else {
+					        	let self = this
+					        	setTimeout(() => {
+					        		self.completedExtraction()
+					        	}, 250)
+					        }
+					    }
+
+					    this.setProgress()
+	    			})
+	    			// if there's been an error
+	    			.catch(error => {
+	    				// the image has also be processed
+					    this.completed.push(file.name)
+					    // but we add it to the failed array
+					    this.failed.push({
+			    			name: file.filename,
+			    			message: error.message
+			    		})
+			    		// it it was the last iage to process
+			    		if (this.completedCount == this.count) this.failedExtraction()
+
+			    		this.setProgress()
+					})
 		    });
-	    },
-	    complete(file, status) {
-	    	this.completed.push(file.name);
-	    	if (status == 'error') {
-	    		this.failed.push(file.name);
-	    	}
-
-	    	if (this.completedCount == this.count) {
-		        if (this.failed.length > 0) {
-		            this.failedExtraction();
-		        }
-		        else {
-			        setTimeout(() => {
-			            this.completedExtraction();
-			        }, 250);
-			    }
-		    }
-
-		    this.setProgress();
 	    },
 	    setProgress() {
 			let percent = this.completedCount / this.count * 100;
@@ -133,23 +156,25 @@ export default {
 			this.$refs.dialog.close();
 			this.$store.dispatch("notification/success", message);
 
-	    	this.processing = false;
-	    	this.currentIndex = 0;
-	    	this.files = {};
+	    	this.processing = false
+	    	this.currentIndex = 0
+	    	this.files = {}
 		},
 		failedExtraction() {
-			let errorString = this.failed.length > 1 ? ' errors.' : ' error.';
-			let message = this.completedCount +' images processed, with '+ this.failed.length + errorString;
-			let failed = this.failed;
+			let errorString = this.failed.length > 1 ? ' errors.' : ' error.'
+			let message = this.completedCount +' images processed, with '+ this.failed.length + errorString
 
-			this.$refs.dialog.close();
-			this.$store.dispatch("notification/error", message);
+			this.errorMessage = message
 
-			this.processing = false;
-	    	this.currentIndex = 0;
-	    	this.files = this.files.filter(function(file) {
-				return failed.indexOf(file.name) > -1;
-			});
+			this.processing = false
+	    	this.currentIndex = 0
+	    	this.files = this.files.filter(file => {
+				return this.failed.filter(e => e.name === file.filename).length;
+			})
+		},
+		openDialog() {
+			this.resetArrays()
+			this.$refs.dialog.open()
 		},
 	    abortExtraction() {
 	    	this.$refs.dialog.close();
@@ -163,7 +188,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 	.k-icon[data-back="theme-empty"],
 	.k-icon[data-back="theme-process"] { 
         background: #f5f5f5;
@@ -186,6 +211,19 @@ export default {
 		justify-content: space-between;
 		align-items: flex-end;
 		margin-top: 3px;
+	}
+	.colorextractor-errors {
+		font-size: 0.75rem;
+		margin-top: 1rem;
+	}
+	.colorextractor-errors .error-message {
+		background: lighten(#d16464, 25%);
+		border-left: 2px solid #d16464;
+		padding: 0.5rem;
+		margin-top: 3px;
+	}
+	.colorextractor-errors .error + .error {
+		margin-top: 0.75rem;
 	}
 	.k-colextractor-counter {
 		color: #777;

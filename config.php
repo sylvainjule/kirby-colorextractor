@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . DS . 'lib' . DS . 'functions.php';
+require_once __DIR__ . '/lib/colorextractor.php';
 
 Kirby::plugin('sylvainjule/colorextractor', [
 	'options' => array(
