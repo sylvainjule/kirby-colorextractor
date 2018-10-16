@@ -6,6 +6,7 @@ if (!class_exists('SylvainJule\ColorExtractor')) {
 
 Kirby::plugin('sylvainjule/colorextractor', [
 	'options' => array(
+		'cache' => true,
 		'average' => false,
 		'fallbackColor' => '#ffffff',
 	),

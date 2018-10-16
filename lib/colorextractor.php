@@ -23,6 +23,24 @@ class ColorExtractor {
 		));
 	}
 
+    private static $cache = null;
+
+    private static function cache(): \Kirby\Cache\Cache {
+        if(!static::$cache) {
+            static::$cache = kirby()->cache('sylvainjule.colorextractor');
+        }
+        return static::$cache;
+    }
+
+    public static function getFilesIndex($force = false) {
+        $index = $force ? null : static::cache()->get('files.index');
+        if(!$index) {
+        	$index = site()->index()->files();
+            static::cache()->set('files.index', $index, 15);
+        }
+        return $index;
+    }
+
 	public static function absoluteThumbUrl() {
 	    if (isset($_SERVER['HTTPS'])){
 	        $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
