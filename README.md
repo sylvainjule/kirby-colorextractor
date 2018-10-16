@@ -84,7 +84,7 @@ fields:
     type: color
 ```
 
-Accessing the color from a template is straightforward :
+Here's how to access it from your template :
 
 ```php
 <?php 
