@@ -1,17 +1,19 @@
 <?php
 
+namespace SylvainJule;
+
 use League\ColorExtractor\Color;
-use League\ColorExtractor\ColorExtractor;
+use League\ColorExtractor\ColorExtractor as Extractor;
 use League\ColorExtractor\Palette;
 
-class ColExtractor {
+class ColorExtractor {
 
 	public static function extractColor($image, $size, $fallbackColor) {
 		$thumb     = $image->resize($size);
 		$url       = $thumb->url();
 		$url       = substr($url, 0, 4) === 'http' ? $url : self::absoluteThumbUrl($url);
 		$palette   = Palette::fromFilename($url, Color::fromHexToInt($fallbackColor));
-		$extractor = new ColorExtractor($palette);
+		$extractor = new Extractor($palette);
 		$colors    = $extractor->extract(1);
 		$hex       = Color::fromIntToHex($colors[0]);
 				

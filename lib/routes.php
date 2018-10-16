@@ -11,7 +11,7 @@ return array(
         	$fallbackColor = option('sylvainjule.colorextractor.fallBackColor');
 
         	try {
-        		ColExtractor::extractColor($file, $size, $fallbackColor);
+        		SylvainJule\ColorExtractor::extractColor($file, $size, $fallbackColor);
         		$response = array(
 		            'status' => 'success',
 		        );

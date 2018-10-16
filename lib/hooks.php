@@ -5,7 +5,7 @@ $extract = function($file) {
     	$size          = option('sylvainjule.colorextractor.average') ? 1 : 300;
     	$fallbackColor = option('sylvainjule.colorextractor.fallBackColor');
 
-    	ColExtractor::extractColor($file, $size, $fallbackColor);
+    	SylvainJule\ColorExtractor::extractColor($file, $size, $fallbackColor);
     }
 };
 
