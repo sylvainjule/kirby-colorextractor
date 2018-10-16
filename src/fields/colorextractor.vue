@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import extractColor from "./helpers/extractColors.js";
 
 export default {
 	data() { 
