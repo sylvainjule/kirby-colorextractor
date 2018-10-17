@@ -110,10 +110,8 @@ export default {
 	    	this.processing = true
 
 	    	this.files.forEach((file, index) => {
-	    		console.log(index);
 	    		this.$api.post('colorextractor/process-image', {id: file.id, index: index})
 	    			.then(response => {
-	    				console.log(response)
 	    				// the image has been processed
 	    				this.completed.push(file.name)
 
