@@ -13,7 +13,8 @@ return array(
         'computed' => array(
         	'files' => function() {
         		$array = array();
-        		$files = site()->index()->images()->filter(function($file) {
+        		$index = SylvainJule\ColorExtractor::getFilesIndex(true);
+        		$files = $index->filter(function($file) {
         			return $file->color()->isEmpty();
         		});
 

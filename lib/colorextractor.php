@@ -35,7 +35,7 @@ class ColorExtractor {
     public static function getFilesIndex($force = false) {
         $index = $force ? null : static::cache()->get('files.index');
         if(!$index) {
-        	$index = site()->index()->files();
+        	$index = site()->index()->images();
             static::cache()->set('files.index', $index, 15);
         }
         return $index;
