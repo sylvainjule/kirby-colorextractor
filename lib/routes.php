@@ -2,7 +2,7 @@
 
 return array(
     array(
-        'pattern' => 'api/colorextractor/process-image',
+        'pattern' => 'colorextractor/process-image',
         'method'  => 'POST',
         'action'  => function() {
             $id            = get('id');

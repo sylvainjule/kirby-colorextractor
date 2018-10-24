@@ -12,5 +12,7 @@ Kirby::plugin('sylvainjule/colorextractor', [
 	),
     'fields' => require_once __DIR__ . '/lib/fields.php',
     'hooks'  => require_once __DIR__ . '/lib/hooks.php',
-    'routes' => require_once __DIR__ . '/lib/routes.php',
+    'api' => array(
+    	'routes' => require_once __DIR__ . '/lib/routes.php',
+    ),
 ]);
