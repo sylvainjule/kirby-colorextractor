@@ -1,32 +1,31 @@
 <template>
     <k-field v-bind="$attrs">
     	<k-list-item v-if="count == 0"
-    				 :text="messageEmpty" 
+    				 :text="$t('colorextractor.button.text.empty')" 
     				 :icon="iconEmpty" 
-    				 :element="el" 
+    				 element="div" 
     				 class="colorextractor-empty" />
     	<k-list-item v-else
-    				 :text="message" 
+    				 :text="$t('colorextractor.button.text')" 
     				 :icon="icon" 
-    				 :element="el" 
+    				 element="div" 
     				 class="colorextractor-button"
     				 @click="openDialog" />
 
     	<k-dialog ref="dialog" theme="negative">
 		    <template v-if="!processing && !completedCount">
-	    		<k-text>
-	    			There {{isString}} <strong>{{count}} {{imageString}}</strong> without any color extracted, do you want to process {{itString}} now?
+	    		<k-text v-html="$t('colorextractor.dialog.text', {count: count}, count)">
 	    		</k-text>
 				<template slot="footer">
 				    <k-button-group>
-				        <k-button icon="cancel" @click="$refs.dialog.close()">Cancel</k-button>
+				        <k-button icon="cancel" @click="$refs.dialog.close()">{{ $t('cancel') }}</k-button>
 				        <k-button icon="check" theme="positive" @click="processImages">Process</k-button>
 				    </k-button-group>
 				</template>
 		    </template>
 		    <template v-else-if="!processing && failed.length">
 	    		<k-text>
-	    			{{ errorMessage }}
+	    			{{ $t('colorextractor.dialog.text.error', {count: completedCount, failed: failed.length}, completedCount) }}
 	    		</k-text>
 	    		<ul class="colorextractor-errors">
 	    			<li v-for="(obj, index) in failed" class="error">
@@ -36,21 +35,21 @@
 	    		</ul>
 				<template slot="footer">
 				    <k-button-group>
-				        <k-button icon="cancel" @click="$refs.dialog.close()">Close</k-button>
+				        <k-button icon="cancel" @click="$refs.dialog.close()">{{ $t('close') }}</k-button>
 				    </k-button-group>
 				</template>
 		    </template>
 		    <template v-else-if="processing">
-			    <k-headline>Processing…</k-headline>
+			    <k-headline>{{ $t('colorextractor.dialog.processing') }}</k-headline>
 		        <k-progress ref="progress"/>
 			    <ul class="k-upload-list">
 			        <div class="colorextractor-progress-caption">
-		            	<p class="k-colextractor-counter">Extracted: {{completedCount}} / {{count}}</p>
+		            	<p class="k-colextractor-counter">{{ $t('colorextractor.dialog.extracted') }}: {{completedCount}} / {{count}}</p>
 		            </div>
 		        </ul>
 				<template slot="footer">
 				    <k-button-group>
-				      <k-button icon="cancel" @click="abortExtraction">Cancel</k-button>
+				      <k-button icon="cancel" @click="abortExtraction">{{ $t('cancel') }}</k-button>
 				    </k-button-group>
 				</template>
 		    </template>
@@ -63,7 +62,6 @@
 export default {
 	data() { 
 		return {
-			el: 'div',
 			iconEmpty: {
 				type: 'check',
 				back: 'theme-empty'
@@ -75,12 +73,9 @@ export default {
 			processing: false,
 			completed: [],
 			failed: [],
-			errorMessage: String,
 		}
 	},
 	props: {
-		message: String,
-		messageEmpty: String,
 		files: Array,
 	},
 	computed: {
@@ -94,15 +89,6 @@ export default {
 			count = Object.is(count, undefined) ? 0 : count
 			return count
 		},
-		imageString: function() {
-			return this.count == 1 ? 'image' : 'images'
-		},
-		isString: function() {
-			return this.count == 1 ? 'is' : 'are'
-		},
-		itString: function() {
-			return this.count == 1 ? 'it' : 'them'
-		}
 	},
 	methods: {
 	    processImages() {
@@ -142,7 +128,7 @@ export default {
 
 			    		this.setProgress()
 					})
-		    });
+		    })
 	    },
 	    setProgress() {
 			let percent = this.completedCount / this.count * 100;
@@ -150,7 +136,7 @@ export default {
 			this.$refs.progress.set(percent);
 	    },
 		completedExtraction() {
-			let message = this.completedCount +' images processed!';
+			let message = this.$t('colorextractor.notification.completed', {count: this.completedCount}, this.completedCount);
 
 			this.$refs.dialog.close();
 			this.$store.dispatch("notification/success", message);
@@ -160,11 +146,6 @@ export default {
 	    	this.files = {}
 		},
 		failedExtraction() {
-			let errorString = this.failed.length > 1 ? ' errors.' : ' error.'
-			let message = this.completedCount +' images processed, with '+ this.failed.length + errorString
-
-			this.errorMessage = message
-
 			this.processing = false
 	    	this.currentIndex = 0
 	    	this.files = this.files.filter(file => {

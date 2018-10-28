@@ -2,14 +2,6 @@
 
 return array(
     'colorextractor' => array(
-    	'props' => array(
-            'message' => function($message = 'Extract missing colors') {
-                return $message;
-            },
-            'messageEmpty' => function($messageEmpty = 'No missing colors') {
-                return $messageEmpty;
-            },
-        ),
         'computed' => array(
         	'files' => function() {
         		$array = array();
