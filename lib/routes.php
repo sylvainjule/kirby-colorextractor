@@ -15,12 +15,14 @@ return array(
         		SylvainJule\ColorExtractor::extractColor($file, $size, $fallbackColor);
         		$response = array(
 		            'status' => 'success',
+		            'plugin' => 'colorextractor',
 		        );
 		        return $response;
         	}
         	catch (Exception $e) {
         		$response = array(
 		            'status' => 'error',
+		            'plugin' => 'colorextractor',
 		            'message'  => $e->getMessage()
 		        );
 		        return $response;
