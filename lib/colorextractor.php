@@ -41,7 +41,7 @@ class ColorExtractor {
         return $index;
     }
 
-	public static function absoluteThumbUrl() {
+	public static function absoluteThumbUrl($url) {
 	    if (isset($_SERVER['HTTPS'])){
 	        $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
 	    }
