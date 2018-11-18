@@ -6,7 +6,9 @@ This plugins extracts a dominant / average color of any image and stores it in t
 
 ## Installation
 
-Download and copy folder to ```/site/plugins/colorextractor```
+Download and copy this repository to ```/site/plugins/colorextractor```
+
+Alternatively, you can install it with composer: ```composer require sylvainjule/colorextractor```
 
 ## Usage
 
