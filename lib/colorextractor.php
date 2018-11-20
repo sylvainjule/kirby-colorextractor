@@ -35,7 +35,9 @@ class ColorExtractor {
     public static function getFilesIndex($force = false) {
         $index = $force ? null : static::cache()->get('files.index');
         if(!$index) {
-        	$index = site()->index()->images();
+        	$published = site()->index()->images();
+        	$drafts    = site()->drafts()->images();
+        	$index     = new \Kirby\Cms\Files(array($published, $drafts));
             static::cache()->set('files.index', $index, 15);
         }
         return $index;
