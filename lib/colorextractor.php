@@ -9,17 +9,19 @@ use League\ColorExtractor\Palette;
 class ColorExtractor {
 
 	public static function extractColor($image, $size, $fallbackColor) {
-		$thumb     = $image->resize($size)->save();
-		$root      = $thumb->root();
-		$palette   = Palette::fromFilename($root, Color::fromHexToInt($fallbackColor));
-		$extractor = new Extractor($palette);
-		$colors    = $extractor->extract(1);
-		$hex       = Color::fromIntToHex($colors[0]);
-				
-		// Update image metadata
-		$image->update(array(
-			'color' => $hex
-		));
+		if($image->isResizable()) {
+			$thumb     = $image->resize($size)->save();
+			$root      = $thumb->root();
+			$palette   = Palette::fromFilename($root, Color::fromHexToInt($fallbackColor));
+			$extractor = new Extractor($palette);
+			$colors    = $extractor->extract(1);
+			$hex       = Color::fromIntToHex($colors[0]);
+					
+			// Update image metadata
+			$image->update(array(
+				'color' => $hex
+			));
+		}
 	}
 
     private static $cache = null;
