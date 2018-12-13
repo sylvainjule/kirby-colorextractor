@@ -95,16 +95,6 @@ $image = $page->image('image.jpg');
 echo $image->color(); ?>
 ```
 
-## Todo
-
-- [ ] Replace `$thumb->url()` with `$thumb->root()`(or `$thumb->mediaRoot()`) once [the thumb issue](https://github.com/k-next/kirby/issues/1015) is fixed 
-- [X] Look for images in both `index()` and `drafts()`, once [the collection issue](https://github.com/k-next/kirby/issues/1097) is fixed 
-- [X] Cache index table (check [lapse](https://github.com/bnomei/kirby3-lapse))
-- [X] Better error handling
-- [X] Add composer support
-- [X] Hooks callback as an anonymous function
-- [x] Add examples of dominant / average colors for different images
-
 ## License
 
 MIT
