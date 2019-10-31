@@ -6,6 +6,9 @@ use League\ColorExtractor\Color;
 use League\ColorExtractor\ColorExtractor as Extractor;
 use League\ColorExtractor\Palette;
 
+use Kirby\Cms\Files;
+use Kirby\Cms\File;
+
 class ColorExtractor {
 
 	public static function extractColor($image, $size, $fallbackColor) {
@@ -16,7 +19,7 @@ class ColorExtractor {
 			$extractor = new Extractor($palette);
 			$colors    = $extractor->extract(1);
 			$hex       = Color::fromIntToHex($colors[0]);
-					
+
 			// Update image metadata
 			$image->update(array(
 				'color' => $hex
@@ -38,8 +41,20 @@ class ColorExtractor {
         if(!$index) {
         	$published = site()->index()->images();
         	$drafts    = site()->drafts()->images();
-        	$index     = new \Kirby\Cms\Files(array($published, $drafts));
-            static::cache()->set('files.index', $index, 15);
+        	$index     = new Files(array($published, $drafts));
+            $files     = array();
+
+            foreach($index as $f) {
+                $files[] = array(
+                    'filename' => $f->filename(),
+                    'parent'   => $f->parent()->uri()
+                );
+            }
+            static::cache()->set('files.index', $files, 15);
+        }
+        else {
+            $index = array_map(function($a) { return kirby()->page($a['parent'])->file($a['filename']); }, $index);
+            $index = new Files($index, kirby()->site());
         }
         return $index;
     }
