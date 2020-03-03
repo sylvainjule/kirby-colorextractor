@@ -13,7 +13,8 @@ class ColorExtractor {
 
 	public static function extractColor($image, $size, $fallbackColor) {
 		if($image->isResizable()) {
-			$thumb     = $image->resize($size)->save();
+            $thumb     = $image->width() > $image->height() ? $image->resize(null, $size) : $image->resize($size);
+            $thumb     = $thumb->save();
 			$root      = $thumb->root();
 			$palette   = Palette::fromFilename($root, Color::fromHexToInt($fallbackColor));
 			$extractor = new Extractor($palette);
