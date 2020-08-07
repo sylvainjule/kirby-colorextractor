@@ -1,6 +1,6 @@
 <?php 
 
-$extract = function($file) {
+function extractFile($file) {
 	if($file->type() == 'image') {
     	$size          = option('sylvainjule.colorextractor.average') ? 1 : 300;
     	$fallbackColor = option('sylvainjule.colorextractor.fallBackColor');
@@ -10,6 +10,10 @@ $extract = function($file) {
 };
 
 return array(
-    'file.create:after'  => $extract,
-    'file.replace:after' => $extract,
+    'file.create:after'  => function ($file) {
+			extractFile($file);
+		},
+    'file.replace:after' => function ($newFile, $oldFile) {
+			extractFile($newFile);
+		},
 );
