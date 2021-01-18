@@ -10,7 +10,7 @@ return array(
             $file          = $filesIndex->find($id);
 
         	try {
-        		$file->extractColors();
+        		$file->extractColor();
         		$response = array(
 		            'status' => 'success',
 		            'plugin' => 'colorextractor',
