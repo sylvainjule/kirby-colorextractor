@@ -8,11 +8,9 @@ return array(
             $id            = get('id');
             $filesIndex    = SylvainJule\ColorExtractor::getFilesIndex();
             $file          = $filesIndex->find($id);
-            $size          = option('sylvainjule.colorextractor.average') ? 1 : 300;
-        	$fallbackColor = option('sylvainjule.colorextractor.fallBackColor');
 
         	try {
-        		SylvainJule\ColorExtractor::extractColor($file, $size, $fallbackColor);
+        		$file->extractColors();
         		$response = array(
 		            'status' => 'success',
 		            'plugin' => 'colorextractor',
