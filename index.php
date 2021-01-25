@@ -17,6 +17,17 @@ Kirby::plugin('sylvainjule/colorextractor', [
         'de' => require_once __DIR__ . '/lib/languages/de.php',
         'fr' => require_once __DIR__ . '/lib/languages/fr.php',
     ),
+    'fileMethods' => [
+        'extractColor' => function() : Kirby\Cms\Field {
+            if($this->type() === 'image') {
+                $size          = option('sylvainjule.colorextractor.average') ? 1 : 300;
+                $fallbackColor = option('sylvainjule.colorextractor.fallBackColor');
+
+                SylvainJule\ColorExtractor::extractColor($this, $size, $fallbackColor);
+            }
+            return $this->color();
+        }
+    ],
     'api' => array(
     	'routes' => require_once __DIR__ . '/lib/routes.php',
     ),
