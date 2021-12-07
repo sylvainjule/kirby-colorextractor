@@ -5,18 +5,47 @@ if (!class_exists('SylvainJule\ColorExtractor')) {
 }
 
 Kirby::plugin('sylvainjule/colorextractor', [
-	'options' => array(
-		'cache' => true,
+	'options' => [
 		'average' => false,
 		'fallbackColor' => '#ffffff',
-	),
-    'fields' => require_once __DIR__ . '/lib/fields.php',
-    'hooks'  => require_once __DIR__ . '/lib/hooks.php',
-    'translations' => array(
-        'en' => require_once __DIR__ . '/lib/languages/en.php',
-        'de' => require_once __DIR__ . '/lib/languages/de.php',
-        'fr' => require_once __DIR__ . '/lib/languages/fr.php',
-    ),
+        'jobs' => [
+            'extractColors' => function () {
+                $files      = SylvainJule\ColorExtractor::getFilesIndex();
+                $files      = $files->filter(function($file) { return $file->color()->isEmpty(); });
+                $filesCount = $files->count();
+
+                foreach($files as $file) {
+                    $file->extractColor();
+                }
+
+                return [
+                    'status' => 200,
+                    'label' => tc('colorextractor.processed', $filesCount)
+                ];
+            },
+            'forceExtractColors' => function () {
+                $files      = SylvainJule\ColorExtractor::getFilesIndex();
+                $filesCount = $files->count();
+
+                foreach($files as $file) {
+                    $file->extractColor();
+                }
+
+                return [
+                    'status' => 200,
+                    'label' => tc('colorextractor.processed', $filesCount)
+                ];
+            },
+        ]
+	],
+    'hooks'  => [
+        'file.create:after'  => function ($file) {
+            $file->extractColor();
+        },
+        'file.replace:after' => function ($newFile, $oldFile) {
+            $newFile->extractColor();
+        }
+    ],
     'fileMethods' => [
         'extractColor' => function() : Kirby\Cms\Field {
             if($this->type() === 'image') {
@@ -28,7 +57,27 @@ Kirby::plugin('sylvainjule/colorextractor', [
             return $this->color();
         }
     ],
-    'api' => array(
-    	'routes' => require_once __DIR__ . '/lib/routes.php',
+    'translations' => array(
+        'en' => [
+            'colorextractor.processed'  => [
+                'There are no images with missing colors.',
+                '1 image processed!',
+                '{{ count }} images processed!'
+            ],
+        ],
+        'de' => [
+            'colorextractor.processed'  => [
+                'Keine fehlenden Farben.',
+                'Bild verarbeitet!',
+                '{{ count }} Bilder verarbeitet!'
+            ],
+        ],
+        'fr' => [
+            'colorextractor.processed'  => [
+                'Aucune couleur manquante.',
+                '1 couleur extraite !',
+                '{{ count }} couleurs extraites !'
+            ],
+        ]
     ),
 ]);
