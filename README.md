@@ -18,10 +18,13 @@ This plugins extracts a dominant / average color of any image and stores it in t
   - [3.1. Vibrant / Average](#31-vibrant--average) 
   - [3.2. Transparency handling](#32-transparency-handling) 
 - [4. Displaying and using the color](#4-displaying-and-using-the-color)
+  - [4.1. If a single color is extracted](#41-if-a-single-color-is-extracted)
+  - [4.2. If both colors are extracted](#42-if-both-colors-are-extracted)
 - [5. License](#5-license)
 - [6. Credits](#6-credits)
 
 <br/>
+
 
 ## 1. Installation
 
@@ -69,16 +72,20 @@ The `extractColors` job will only extract the **missing colors**. If you want to
 
 ## 3. Options
 
-#### 3.1. Vibrant / Average
+#### 3.1. Extraction mode
 
-By default, the plugin tends to extract the most dominant / vibrant color of the image. Sometimes though, it can be handy to extract an average one based on an approximation of the whole color palette. When set to ```true```, this options shrinks the image to a 1x1 pixel thumb, then grab the color the image processor chose as the average one. You'll find some examples [here](https://github.com/sylvainjule/kirby3-colorextractor/blob/master/docs/examples.md).
+By default, the plugin tends to extract the most dominant / vibrant color of the image. Sometimes though, it can be handy to extract an average one based on an approximation of the whole color palette. When set to `average`, this options shrinks the image to a 1x1 pixel thumb, then grab the color the image processor chose as the average one. You'll find some examples [here](https://github.com/sylvainjule/kirby3-colorextractor/blob/master/docs/examples.md).
 
-Default is ```false``` 
+You can also set it to `both`, if you want both colors to be extracted and pick from them later from your templates (see the [`toColors`](#42-if-both-colors-are-extracted) method)
+
+
+
+Available options are `dominant | average | both`. Default is `dominant`.
 
 ```php
 // config/config.php
 return array(
-  'sylvainjule.colorextractor.average' => true,
+  'sylvainjule.colorextractor.mode' => 'dominant',
 );
 ```
 
@@ -99,34 +106,30 @@ return array(
 
 ## 4. Displaying and using the color
 
-The plugin works well together with [@hananils's color picker](https://github.com/hananils/kirby-colors), which might come handy to preview and adjust the detected color.
+#### 4.1. If a single color is extracted
 
-```yaml
-# Page blueprint within site/blueprints/pages/ folder
-sections:
-      files:
-        headline: Images
-        type: files
-        template: color
+In case you have chosen either `dominant` (default) or `average` extraction mode, you can access it directly from your template under the `color` fieldname:
+
+```php
+$image->color();
 ```
 
+The plugin works well combined with [@hananils's color picker](https://github.com/hananils/kirby-colors), which might come handy to preview and adjust the detected color.
+
 ```yaml
-# Color template within site/blueprints/files/color.yml
-title: Color
-accept:
-  mime: image/jpeg, image/png
+# Place this inside your file blueprint
 fields:
   color:
     type: colors
 ```
 
-Here's how to access it from your template :
+#### 4.2. If both colors are extracted
+
+If you have chosen to extract and store both colors, the color field will store both HEX values delimited by a comma. The plugin provides a file method to get a specific color from there:
 
 ```php
-<?php 
-// make sure $image is a File object
-$image = $page->image('image.jpg');  
-echo $image->color(); ?>
+$image->color()->toColor('dominant');
+$image->color()->toColor('average');
 ```
 
 <br/>

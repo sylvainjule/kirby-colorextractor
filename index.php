@@ -6,8 +6,9 @@ if (!class_exists('SylvainJule\ColorExtractor')) {
 
 Kirby::plugin('sylvainjule/colorextractor', [
 	'options' => [
-		'average' => false,
+		'average'       => false,
 		'fallbackColor' => '#ffffff',
+        'mode'          => 'dominant',
         'jobs' => [
             'extractColors' => function () {
                 $files      = SylvainJule\ColorExtractor::getFilesIndex();
@@ -49,12 +50,25 @@ Kirby::plugin('sylvainjule/colorextractor', [
     'fileMethods' => [
         'extractColor' => function() : Kirby\Cms\Field {
             if($this->type() === 'image') {
-                $size          = option('sylvainjule.colorextractor.average') ? 1 : 300;
+                $mode          = option('sylvainjule.colorextractor.mode');
+                // compatibility with previous versions
+                $mode          = option('sylvainjule.colorextractor.average') == true ? 'average' : $mode;
                 $fallbackColor = option('sylvainjule.colorextractor.fallBackColor');
 
-                SylvainJule\ColorExtractor::extractColor($this, $size, $fallbackColor);
+                SylvainJule\ColorExtractor::extractColor($this, $mode, $fallbackColor);
             }
             return $this->color();
+        }
+    ],
+    'fieldMethods' => [
+        'toColor' => function($field, $mode = 'dominant') {
+            $colors = $field->split(',');
+            $count  = count($colors);
+
+            if($count == 0) $field->value = null;
+            else $field->value = $mode == 'dominant' || $count == 1 ? $colors[0] : $colors[1];
+
+            return $field;
         }
     ],
     'translations' => array(
