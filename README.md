@@ -15,7 +15,7 @@ This plugins extracts a dominant / average color of any image and stores it in t
   - [2.1. Hooks](#21-hooks) 
   - [2.2. Panel button](#22-panel-button)
 - [3. Configuration](#3-configuration)
-  - [3.1. Vibrant / Average](#31-vibrant--average) 
+  - [3.1. Extraction mode](#31-extraction-mode)
   - [3.2. Transparency handling](#32-transparency-handling) 
 - [4. Displaying and using the color](#4-displaying-and-using-the-color)
   - [4.1. If a single color is extracted](#41-if-a-single-color-is-extracted)
