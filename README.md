@@ -76,7 +76,7 @@ The `extractColors` job will only extract the **missing colors**. If you want to
 
 By default, the plugin tends to extract the most dominant / vibrant color of the image. Sometimes though, it can be handy to extract an average one based on an approximation of the whole color palette. When set to `average`, this options shrinks the image to a 1x1 pixel thumb, then grab the color the image processor chose as the average one. You'll find some examples [here](https://github.com/sylvainjule/kirby3-colorextractor/blob/master/docs/examples.md).
 
-You can also set it to `both`, if you want both colors to be extracted and pick from them later from your templates (see the [`toColors`](#42-if-both-colors-are-extracted) method)
+You can also set it to `both`, if you want both colors to be extracted and pick from them later from your templates (see the [`plugin's methods`](#42-if-both-colors-are-extracted))
 
 
 
@@ -128,8 +128,8 @@ fields:
 If you have chosen to extract and store both colors, the color field will store both HEX values delimited by a comma. The plugin provides a file method to get a specific color from there:
 
 ```php
-$image->color()->toColor('dominant');
-$image->color()->toColor('average');
+$image->color()->dominantColor();
+$image->color()->averageColor();
 ```
 
 <br/>

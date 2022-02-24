@@ -61,12 +61,21 @@ Kirby::plugin('sylvainjule/colorextractor', [
         }
     ],
     'fieldMethods' => [
-        'toColor' => function($field, $mode = 'dominant') {
+        'dominantColor' => function($field, $mode = 'dominant') {
             $colors = $field->split(',');
             $count  = count($colors);
 
             if($count == 0) $field->value = null;
-            else $field->value = $mode == 'dominant' || $count == 1 ? $colors[0] : $colors[1];
+            else $field->value = $colors[0];
+
+            return $field;
+        },
+        'averageColor' => function($field, $mode = 'dominant') {
+            $colors = $field->split(',');
+            $count  = count($colors);
+
+            if($count == 0) $field->value = null;
+            else $field->value = $count == 1 ? $colors[0] : $colors[1];
 
             return $field;
         }
