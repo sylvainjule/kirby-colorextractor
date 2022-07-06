@@ -2,9 +2,7 @@
 
 namespace SylvainJule;
 
-use League\ColorExtractor\Color;
-use League\ColorExtractor\ColorExtractor as Extractor;
-use League\ColorExtractor\Palette;
+use ColorThief\ColorThief;
 
 use Kirby\Cms\Files;
 use Kirby\Cms\File;
@@ -30,12 +28,11 @@ class ColorExtractor {
         $thumb     = $image->width() > $image->height() ? $image->resize(null, $size) : $image->resize($size);
         $thumb     = $thumb->save();
         $root      = $thumb->root();
-        $palette   = Palette::fromFilename($root, Color::fromHexToInt($fallbackColor));
-        $extractor = new Extractor($palette);
-        $colors    = $extractor->extract(1);
-        $hex       = Color::fromIntToHex($colors[0]);
 
-        return $hex;
+        // ColorThief::getColor($sourceImage[, $quality=10, $area=null, $outputFormat='array', $adapter = null])
+        $dominantColor = ColorThief::getColor($root, 10, null, 'hex', null);
+
+        return $dominantColor;
     }
 
     public static function getFilesIndex() {
