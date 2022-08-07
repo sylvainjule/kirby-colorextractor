@@ -16,8 +16,9 @@ class ColorExtractor {
             if(in_array($mode, ['dominant', 'both'])) {
                 $colors[] = static::processImage($image, 300, $fallbackColor);
             }
+            // Size below 10 seems to fail / timeout with ColorThief...
             if(in_array($mode, ['average', 'both'])) {
-                $colors[] = static::processImage($image, 1, $fallbackColor);
+                $colors[] = static::processImage($image, 10, $fallbackColor);
             }
 
 			$image->update(['color' => implode(',', $colors)]);
