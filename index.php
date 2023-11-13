@@ -53,7 +53,7 @@ Kirby::plugin('sylvainjule/colorextractor', [
                 $mode          = option('sylvainjule.colorextractor.mode');
                 // compatibility with previous versions
                 $mode          = option('sylvainjule.colorextractor.average') == true ? 'average' : $mode;
-                $fallbackColor = option('sylvainjule.colorextractor.fallBackColor');
+                $fallbackColor = option('sylvainjule.colorextractor.fallbackColor');
 
                 SylvainJule\ColorExtractor::extractColor($this, $mode, $fallbackColor);
             }
