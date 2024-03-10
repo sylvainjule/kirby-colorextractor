@@ -48,7 +48,7 @@ Kirby::plugin('sylvainjule/colorextractor', [
         }
     ],
     'fileMethods' => [
-        'extractColor' => function() : Kirby\Cms\Field {
+        'extractColor' => function() : Kirby\Content\Field {
             if($this->type() === 'image') {
                 $mode          = option('sylvainjule.colorextractor.mode');
                 // compatibility with previous versions
