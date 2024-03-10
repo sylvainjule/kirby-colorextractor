@@ -3,7 +3,7 @@
     "description": "Extract dominant / average color from any image.",
     "type": "kirby-plugin",
     "license": "MIT",
-    "version": "1.0.8",
+    "version": "2.0.0",
     "authors": [
         {
             "name": "Sylvain Julé",
