@@ -8,7 +8,7 @@ This plugins extracts a dominant / average color of any image and stores it in t
 
 ## Overview
 
-> This plugin is completely free and published under the MIT license. However, if you are using it in a commercial project and want to help me keep up with maintenance, please consider [making a donation of your choice](https://www.paypal.me/sylvainjl) or purchasing your license(s) through [my affiliate link](https://a.paddle.com/v2/click/1129/36369?link=1170).
+> This plugin is completely free and published under the MIT license. However, if you are using it in a commercial project and want to help me keep up with maintenance, you can consider [making a donation of your choice](https://www.paypal.me/sylvainjl).
 
 - [1. Installation](#1-installation)
 - [2. Usage](#2-usage)
@@ -27,6 +27,8 @@ This plugins extracts a dominant / average color of any image and stores it in t
 
 
 ## 1. Installation
+
+> Compatible with Kirby 5 (latest release) as well as Kirby 3 and 4 (maintained / tested up to v2.0.0 of this plugin).
 
 Download and copy this repository to ```/site/plugins/colorextractor```
 
