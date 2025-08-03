@@ -1,4 +1,4 @@
-# Kirby 3 – Color extractor
+# Kirby – Color extractor
 
 ![colorextractor](https://user-images.githubusercontent.com/14079751/45950127-c73c0d00-bffe-11e8-8e10-eef90185f624.jpg)
 
