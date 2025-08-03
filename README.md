@@ -46,24 +46,20 @@ Once installed within the ```plugins``` folder, it will automatically start extr
 
 If you happen to upload files manually, from frontend or any other way while not trigerring the hooks, custom [janitor](https://github.com/bnomei/kirby3-janitor) jobs are also available to catch up with all the images of a website without an associated color.
 
-You'll first need to install the janitor plugin.
+You'll first need to install the janitor plugin and the Kirby CLI:
 
-Then register the jobs provided by this plugin in your `config.php`:
-
-```php
-'bnomei.janitor.jobs-extends' => [
-    'sylvainjule.colorextractor.jobs',
-],
+```bash
+composer require getkirby/cli bnomei/kirby3-janitor
 ```
 
-You can now use it in your blueprints:
+Then use the jobs in your blueprints:
 
 ```yaml
 colorextractor:
     type: janitor
     label: Extract missing colors
     progress: 'Processing…'
-    job: extractColors
+    command: janitor:job --key sylvainjule.colorextractor.jobs.extractColors
 ```
 
 The `extractColors` job will only extract the **missing colors**. If you want to force a re-extraction of existing colors, use the `forceExtractColors` job instead.
