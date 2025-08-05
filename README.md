@@ -3,6 +3,7 @@
 ![colorextractor](https://user-images.githubusercontent.com/14079751/45950127-c73c0d00-bffe-11e8-8e10-eef90185f624.jpg)
 
 This plugins extracts a dominant / average color of any image and stores it in the file's metadata as a HEX value.
+Optionally, it can also generate a color palette from any image.
 
 <br/>
 

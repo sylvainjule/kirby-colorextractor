@@ -6,9 +6,15 @@ if (!class_exists('SylvainJule\ColorExtractor')) {
 
 Kirby::plugin('sylvainjule/colorextractor', [
 	'options' => [
-		'average'       => false,
-		'fallbackColor' => '#ffffff',
-        'mode'          => 'dominant',
+		'average'        => false,
+		'fallbackColor'  => '#ffffff',
+        'mode'           => 'dominant',
+        'default.hook'  => true,
+        'palette'       => [
+            'hook'     => false,
+            'template' => null,
+            'limit'    => 10
+        ],
         'jobs' => [
             'extractColors' => function () {
                 $files      = SylvainJule\ColorExtractor::getFilesIndex();
@@ -53,11 +59,25 @@ Kirby::plugin('sylvainjule/colorextractor', [
                 $mode          = option('sylvainjule.colorextractor.mode');
                 // compatibility with previous versions
                 $mode          = option('sylvainjule.colorextractor.average') == true ? 'average' : $mode;
-                $fallbackColor = option('sylvainjule.colorextractor.fallbackColor');
+                $fallbackColor = option('sylvainjule.colorextractor.fallbackColor', '#ffffff');
 
                 SylvainJule\ColorExtractor::extractColor($this, $mode, $fallbackColor);
             }
+
             return $this->color();
+        },
+        'getPalette' => function() {
+            if($this->palette()->isNotEmpty()) {
+                return $this->palette()->yaml();
+            }
+            else {
+                $limit         = option('sylvainjule.colorextractor.palette.limit', 10);
+                $fallbackColor = option('sylvainjule.colorextractor.fallbackColor', '#ffffff');
+                $palette = SylvainJule\ColorExtractor::extractPalette($this, $limit, 400, $fallbackColor);
+
+                $this->save(['palette' => $palette]);
+                return $palette;
+            }
         }
     ],
     'fieldMethods' => [
