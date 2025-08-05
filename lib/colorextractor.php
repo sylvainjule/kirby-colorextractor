@@ -28,7 +28,6 @@ class ColorExtractor {
             }
 
             if(option('sylvainjule.colorextractor.palette.hook')) {
-                ray($image->template());
                 $limit         = option('sylvainjule.colorextractor.palette.limit', 10);
                 $fallbackColor = option('sylvainjule.colorextractor.fallbackColor', '#ffffff');
                 $templates     = option('sylvainjule.colorextractor.palette.template', null);
