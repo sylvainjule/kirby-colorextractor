@@ -21,7 +21,7 @@ Optionally, it can also generate a color palette to be used in combination with 
 - [4. Displaying and using the color](#4-displaying-and-using-the-color)
   - [4.1. If a single color is extracted](#41-if-a-single-color-is-extracted)
   - [4.2. If both colors are extracted](#42-if-both-colors-are-extracted)
-- [5. Palette usage]
+- [5. Palette usage](#5-palette-usage)
   - [5.1. Hook](#51-hook) 
   - [5.2. Field method](#52-field-method)
 - [6. License](#6-license)
@@ -142,7 +142,7 @@ You have two options to generate the palette:
 
 #### 5.1. Hook
 
-You can generate a palette for any image uploaded or replaced in the panel. In order to to so, you need to set the 'palette.hook' option to `true` (default if `false`).
+You can generate a palette for any image uploaded or replaced in the panel. In order to to so, you need to set the `palette.hook` option to `true` (default if `false`).
 
 Additionally, you can:
 - The number of colors to be extracted with the `palette.limit` option (default is `10`)
