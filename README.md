@@ -3,7 +3,7 @@
 ![colorextractor](https://user-images.githubusercontent.com/14079751/45950127-c73c0d00-bffe-11e8-8e10-eef90185f624.jpg)
 
 This plugins extracts a dominant / average color of any image and stores it in the file's metadata as a HEX value.
-Optionally, it can also generate a color palette from any image.
+Optionally, it can also generate a color palette to be used in combination with the `color` field.
 
 <br/>
 
@@ -12,17 +12,20 @@ Optionally, it can also generate a color palette from any image.
 > This plugin is completely free and published under the MIT license. However, if you are using it in a commercial project and want to help me keep up with maintenance, you can consider [making a donation of your choice](https://www.paypal.me/sylvainjl).
 
 - [1. Installation](#1-installation)
-- [2. Usage](#2-usage)
-  - [2.1. Hooks](#21-hooks) 
+- [2. Default usage](#2-default-usage)
+  - [2.1. Hook](#21-hook) 
   - [2.2. Panel button](#22-panel-button)
-- [3. Configuration](#3-configuration)
+- [3. Default options](#3-default-options)
   - [3.1. Extraction mode](#31-extraction-mode)
   - [3.2. Transparency handling](#32-transparency-handling) 
 - [4. Displaying and using the color](#4-displaying-and-using-the-color)
   - [4.1. If a single color is extracted](#41-if-a-single-color-is-extracted)
   - [4.2. If both colors are extracted](#42-if-both-colors-are-extracted)
-- [5. License](#5-license)
-- [6. Credits](#6-credits)
+- [5. Palette usage]
+  - [5.1. Hook](#51-hook) 
+  - [5.2. Field method](#52-field-method)
+- [6. License](#6-license)
+- [7. Credits](#7-credits)
 
 <br/>
 
@@ -37,11 +40,11 @@ Alternatively, you can install it with composer: ```composer require sylvainjule
 
 <br/>
 
-## 2. Usage
+## 2. Default usage
 
 It can be used in two ways :
 
-#### 2.1. Hooks
+#### 2.1. Hook
 
 Once installed within the ```plugins``` folder, it will automatically start extracting colors for any image uploaded or replaced in the panel.
 
@@ -69,7 +72,7 @@ The `extractColors` job will only extract the **missing colors**. If you want to
 
 <br/>
 
-## 3. Options
+## 3. Default options
 
 #### 3.1. Extraction mode
 
@@ -133,13 +136,73 @@ $image->color()->averageColor();
 
 <br/>
 
-## 5. License
+## 5. Palette usage
+
+You have two options to generate the palette:
+
+#### 5.1. Hook
+
+You can generate a palette for any image uploaded or replaced in the panel. In order to to so, you need to set the 'palette.hook' option to `true` (default if `false`).
+
+Additionally, you can:
+- The number of colors to be extracted with the `palette.limit` option (default is `10`)
+- If the palette generation is to be restricted to specific file templates with the `palette.template` option (default is `null`: a palette will be generated for any image with any template if the palette hook is active. `String | Array`).
+
+```php
+# default values
+'sylvainjule.colorextractor.palette' => [
+    'hook'     => false,
+    'limit'    => 10,
+    'template' => null
+],
+
+# example values
+'sylvainjule.colorextractor.palette' => [
+    'hook'     => true,
+    'limit'    => 12,
+    'template' => ['template-1', 'template-2'],
+    // 'template' => 'template-1', also works
+],
+```
+
+The palette will be stored in the file .txt with the fieldname: `palette`. The plugin provides a dedicated field methods to use is, see below.
+
+If you only need this plugin to extract palettes, you can also disable the default average / dominant color extraction hook with the `default.hook` option (default is `true`):
+
+```php
+'sylvainjule.colorextractor.default.hook' => false,
+```
+
+#### 5.2. Field method
+
+If you don't want any hook running, you can also choose not to activate the hook but use the `->getPalette()` method.
+- If the `palette` exists (= is not empty), the method will return it as an array
+- If the `palette` doesn't exist, it will process the image, generate and save it, then return it as an array.
+
+You can use is to populate the [`color` field options](https://getkirby.com/docs/reference/panel/fields/color#options), for example:
+
+```yaml
+colorPicker:
+  type: color
+  mode: options
+  options:
+    type: query
+    query: page.filePicker.toFile.getPalette
+    # query: page.files.first.getPalette
+    # query: page.files.first.palette.yaml → also works if the palette has already been generated
+    # ...
+```
+
+
+<br/>
+
+## 6. License
 
 MIT
 
 <br/>
 
-## 6. Credits
+## 7. Credits
 
 - K2 Field by [@iandoe](https://github.com/iandoe/kirby-dominant-color/blob/master/README.md)
 - Color extracting process by [@thephpleague](https://github.com/thephpleague/color-extractor)
