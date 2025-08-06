@@ -138,6 +138,8 @@ $image->color()->averageColor();
 
 ## 5. Palette usage
 
+![palette](https://github.com/user-attachments/assets/1a0f13a5-49f5-4db6-b514-d91b8619d9d8)
+
 You have two options to generate the palette:
 
 #### 5.1. Hook
