@@ -7,7 +7,6 @@ use League\ColorExtractor\ColorExtractor as Extractor;
 use League\ColorExtractor\Palette;
 
 use Kirby\Cms\Files;
-use Kirby\Cms\File;
 
 class ColorExtractor {
 
