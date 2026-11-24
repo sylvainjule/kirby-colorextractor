@@ -55,7 +55,8 @@ class ColorExtractor {
         $thumb     = $image->width() > $image->height() ? $image->resize(null, $size) : $image->resize($size);
         $thumb     = $thumb->save();
         $root      = $thumb->root();
-        $palette   = Palette::fromFilename($root, Color::fromHexToInt($fallbackColor));
+        // $palette   = Palette::fromFilename($root, Color::fromHexToInt($fallbackColor));
+        $palette   = static::paletteFromFile($root, $fallbackColor);
         $extractor = new Extractor($palette);
         $colors    = $extractor->extract(1);
         $hex       = Color::fromIntToHex($colors[0]);
@@ -67,7 +68,8 @@ class ColorExtractor {
         $thumb     = $image->width() > $image->height() ? $image->resize(null, $size) : $image->resize($size);
         $thumb     = $thumb->save();
         $root      = $thumb->root();
-        $palette   = Palette::fromFilename($root, Color::fromHexToInt($fallbackColor));
+        // $palette   = Palette::fromFilename($root, Color::fromHexToInt($fallbackColor));
+        $palette   = static::paletteFromFile($root, $fallbackColor);
         $extractor = new Extractor($palette);
         $colors    = $extractor->extract($limit);
         $colors    = array_map(function($value) { return Color::fromIntToHex($value); }, $colors);
@@ -82,6 +84,16 @@ class ColorExtractor {
         $images    = $images->filterBy('extension', 'in', ['png', 'jpg', 'jpeg', 'gif', 'webp']);
 
         return $images;
+    }
+
+    protected static function paletteFromFile($root, $fallbackColor) {
+        $gd = imagecreatefromstring(file_get_contents($root));
+
+        if($gd === false) {
+            throw new \RuntimeException('Failed to load image: ' . $root);
+        }
+
+        return Palette::fromGD($gd, Color::fromHexToInt($fallbackColor));
     }
 
 }

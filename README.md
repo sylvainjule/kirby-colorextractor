@@ -32,7 +32,7 @@ Optionally, it can also generate a color palette to be used in combination with 
 
 ## 1. Installation
 
-> Compatible with Kirby 6 (latest release), 5 (tested up to 2.1.1) as well as Kirby 3 and 4 (tested up to v2.0.0 of this plugin).
+> Compatible with Kirby 6 (latest release), 5 (tested up to 2.1.2) as well as Kirby 3 and 4 (tested up to v2.0.0 of this plugin).
 
 Download and copy this repository to ```/site/plugins/colorextractor```
 
